@@ -1,3 +1,8 @@
+<!-- 태그지시자 입력, 이걸해야 JSTL 사용 가능 -->
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%> <!-- 이걸 선언해줘야 JSTL 중 core를 사용가능 prefix는 name에 해당 -->
+<%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt"%> <!-- JSTL 중 fomat 를 사용가능 -->
+<%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn"%>  <!-- JSTL 중 function 를 사용가능 -->
+
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
 <html>
@@ -17,22 +22,27 @@
 					</tr>
 					<tr>
 						<td class="label">제목</td>
-						<td>제목입니다.</td>
+						<td>${board.title }</td>
 					</tr>
 					<tr>
 						<td class="label">내용</td>
 						<td>
 							<div class="view-content">
-								내용 1입니다.<br>
-								내용 2입니다.<br>
-								내용 3입니다.
+								${board.content }
 							</div>
 						</td>
 					</tr>
 				</table>
 				<div class="bottom">
-					<a href="">글목록</a>
-					<a href="">글수정</a>
+					<a href="/mysite/board?a=list">글목록</a>
+					
+					<c:if test="${authUser.no == board.userNo }">   <!-- 내글인 경우만 글 수정 버튼이 나온다. -->
+						<a href="/mysite/board?a=modify">글수정</a>
+					</c:if>
+						
+					<c:if test="${authUser.no == board.userNo }">
+						<a href="/mysite/board?a=reply">답글</a>
+					</c:if>
 				</div>
 			</div>
 		</div>

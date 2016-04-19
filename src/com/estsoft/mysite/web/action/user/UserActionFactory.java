@@ -42,6 +42,10 @@ public class UserActionFactory extends ActionFactory
 		{
 			action = new ModifyAction();
 		}
+		else if ("checkemail".equals(actionName)) // Ajax Request
+		{
+			action = new CheckEmailAction();
+		}
 		else
 		{
 			action = new DefaultAction(); // 또라이 사용자를 위한 부분

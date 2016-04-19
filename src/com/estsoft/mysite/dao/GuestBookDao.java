@@ -20,7 +20,7 @@ public class GuestBookDao
 		this.dbConnection = dbConnection;
 	}
 	
-	public void insert(GuestBookVo vo)
+	public void add(GuestBookVo vo)
 	{
 		Connection conn = null;
 		PreparedStatement pstmt = null;
@@ -117,6 +117,68 @@ public class GuestBookDao
 			stmt = conn.createStatement();
 			
 			String sql = "select no, name, date_format(reg_date, '%Y-%m-%d %h:%i:%s') as '등록날짜', message from guestbook order by no desc";
+			
+			rs = stmt.executeQuery(sql);
+			
+			while(rs.next())
+			{
+				Long no = rs.getLong(1);
+				String name = rs.getString(2);
+				String regDate = rs.getString(3);
+				String message = rs.getString(4);
+				
+				GuestBookVo vo = new GuestBookVo();
+				
+				vo.setNo(no);
+				vo.setName(name);
+				vo.setRegDate(regDate);
+				vo.setMessage(message);
+				
+				list.add(vo);
+			}
+		}
+		catch(SQLException ex)
+		{
+			System.out.println("error" + ex);
+		}
+		finally
+		{
+			try
+			{
+				if( rs != null)
+				{
+					rs.close();
+				}
+				if( stmt != null)
+				{
+					stmt.close();
+				}
+				if( conn != null)
+				{
+					conn.close();
+				}
+			}
+			catch(SQLException ex)
+			{
+				ex.printStackTrace();
+			}
+		}
+		return list;
+	}
+	
+	public List<GuestBookVo> getList(int page)
+	{
+		List<GuestBookVo> list = new ArrayList<GuestBookVo>();
+		Connection conn = null;
+		Statement stmt = null;  // 여기서는 preparestatement 써도 됨. 
+		ResultSet rs = null;
+		
+		try
+		{
+			conn = dbConnection.getConnection();
+			stmt = conn.createStatement();
+			
+			String sql = "select no, name, date_format(reg_date, '%Y-%m-%d %h:%i:%s') as '등록날짜', message from guestbook order by no desc limit " + (page-1)*5 + ",5";
 			
 			rs = stmt.executeQuery(sql);
 			

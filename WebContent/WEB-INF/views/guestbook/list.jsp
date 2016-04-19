@@ -7,6 +7,10 @@
 <%@page import="java.util.List"%>
 <%@ page contentType="text/html;charset=UTF-8" %>
 
+<%
+	pageContext.setAttribute("newLine", "\r\n");
+%>
+
 <!doctype html>
 <html>
 <head>
@@ -19,8 +23,8 @@
 		<c:import url="/WEB-INF/views/include/header.jsp"/>
 		<div id="content">
 			<div id="guestbook">
-				<form action="/mysite/gb?a=add" method="post">
-					<input type="hidden" name="a" value="insert">
+				<form action="/mysite/gb" method="post">
+					<input type="hidden" name="a" value="add">
 					<table>
 						<tr>
 							<td>이름</td><td><input type="text" name="name"></td>
@@ -48,7 +52,6 @@
 							</tr>
 							<tr>
 								<td colspan=4>
-								
 							<%-- 	<%=vo.getMessage().replace("\r\n", "<br/>") %> --%>
 								${fn:replace(vo.message, newLine, "<br/>") }	
 								</td>

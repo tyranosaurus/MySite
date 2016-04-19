@@ -1,5 +1,6 @@
 package com.estsoft.mysite.web.action.guestbook;
 
+import com.estsoft.mysite.web.action.board.AjaxListAction;
 import com.estsoft.web.action.Action;
 import com.estsoft.web.action.ActionFactory;
 
@@ -25,6 +26,14 @@ public class GuestBookActionFactory extends ActionFactory
 		else if ("delete".equals(actionName))
 		{
 			action = new DeleteAction();
+		}
+		else if ("ajax".equals(actionName))
+		{
+			action = new AjaxAction();
+		}
+		else if ("ajax-list".equals(actionName))
+		{
+			action = new AjaxListAction();
 		}
 		else
 		{

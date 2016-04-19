@@ -31,7 +31,7 @@ public class AddAction implements Action
 		vo.setPassword(password);
 		vo.setMessage(message);
 		
-		dao.insert(vo);
+		dao.add(vo);
 		
 		WebUtil.redirect(request, response, "/mysite/gb?a=list");
 	}

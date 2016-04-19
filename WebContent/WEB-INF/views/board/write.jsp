@@ -12,24 +12,30 @@
 		<div id="content">
 			<div id="board">
 				<form class="board-form" method="post" action="/mysite/board">
-					<input type = "hidden" name = "a" value="write">
+					<input type = "hidden" name = "a" value="add">
+					<input type = "hidden" name = "no" value="${board.no }">
+					<input type = "hidden" name = "group_no" value="${board.groupNo }">
+					<input type = "hidden" name = "order_no" value="${board.orderNo }">
+					<input type = "hidden" name = "depth" value="${board.depth }">
+					
+					
 					<table class="tbl-ex">
 						<tr>
 							<th colspan="2">글쓰기</th>
 						</tr>
 						<tr>
 							<td class="label">제목</td>
-							<td><input type="text" name="title" value=""></td>
+							<td><input type="text" name="title" value=""></td>  <!-- title 따기 -->
 						</tr>
 						<tr>
 							<td class="label">내용</td>
 							<td>
-								<textarea id="content" name="content"></textarea>
+								<textarea id="content" name="content"></textarea> <!-- content 따기 -->
 							</td>
 						</tr>
 					</table>
 					<div class="bottom">
-						<a href="/mysite/board">취소</a>
+						<a href="/mysite/board?a=list">취소</a>
 						<input type="submit" value="등록">
 					</div>
 				</form>				
