@@ -20,10 +20,73 @@ public class GuestBookDao
 		this.dbConnection = dbConnection;
 	}
 	
-	public void add(GuestBookVo vo)
+	public GuestBookVo get(Long no)
 	{
+		GuestBookVo vo = null;
 		Connection conn = null;
 		PreparedStatement pstmt = null;
+		ResultSet rs = null;
+		try
+		{
+			vo = new GuestBookVo();
+			conn = dbConnection.getConnection();
+			
+			String sql = "select no, name, reg_date, message, passwd from guestbook where no= ?";
+			pstmt = conn.prepareStatement(sql);
+			
+			pstmt.setLong(1, no);
+			
+			rs = pstmt.executeQuery();
+			
+			if (rs.next())
+			{
+				Long no1 = rs.getLong(1);
+				String name = rs.getString(2);
+				String reg_date = rs.getString(3);
+				String message = rs.getString(4);
+				String password = rs.getString(5);
+				
+				vo.setNo(no1);
+				vo.setName(name);
+				vo.setRegDate(reg_date);
+				vo.setMessage(message);
+				vo.setPassword(password);
+			}
+			
+			return vo;
+		}
+		catch(SQLException ex)
+		{
+			System.out.println("error" + ex);
+			return null;
+		}
+		finally
+		{
+			try
+			{
+				if( pstmt != null)
+				{
+					pstmt.close();
+				}
+				if( conn != null)
+				{
+					conn.close();
+				}
+			}
+			catch(SQLException ex)
+			{
+				ex.printStackTrace();
+			}
+		}
+	}
+	
+	public Long add(GuestBookVo vo)
+	{
+		Long no = 0L;
+		Connection conn = null;
+		PreparedStatement pstmt = null;
+		Statement stmt = null;
+		ResultSet rs = null;
 		
 		try
 		{
@@ -36,16 +99,33 @@ public class GuestBookDao
 			pstmt.setString(2, vo.getMessage());
 			pstmt.setString(3, vo.getPassword());
 			pstmt.executeUpdate();
-	
+			
+			stmt = conn.createStatement();
+			rs = stmt.executeQuery("select last_insert_id()");  // 프라이머리 키 가져옴
+			if (rs.next())
+			{
+				no = rs.getLong(1);
+			}
+			
+			return no;
 		}
 		catch(SQLException ex)
 		{
 			System.out.println("error" + ex);
+			return 0L;
 		}
 		finally
 		{
 			try
 			{
+				if( rs != null)
+				{
+					rs.close();
+				}
+				if( stmt != null)
+				{
+					stmt.close();
+				}
 				if( pstmt != null)
 				{
 					pstmt.close();
@@ -166,7 +246,7 @@ public class GuestBookDao
 		return list;
 	}
 	
-	public List<GuestBookVo> getList(int page)
+	public List<GuestBookVo> getList(int page)  // 페이지넘버를 받아 데이터를 가져오는 오버로딩
 	{
 		List<GuestBookVo> list = new ArrayList<GuestBookVo>();
 		Connection conn = null;
